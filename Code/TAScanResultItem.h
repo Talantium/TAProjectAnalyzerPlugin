@@ -9,6 +9,13 @@
 #import <Foundation/Foundation.h>
 
 
+extern NSString*    const   TAScanResultItemKeyLanguage;
+extern NSString*    const   TAScanResultItemKeyFiles;
+extern NSString*    const   TAScanResultItemKeyCode;
+extern NSString*    const   TAScanResultItemKeyComment;
+extern NSString*    const   TAScanResultItemKeyBlank;
+
+
 @interface TAScanResultItem : NSObject
 
 @property (nonatomic, retain, readwrite) NSString*      language;

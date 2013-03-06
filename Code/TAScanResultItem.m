@@ -20,6 +20,17 @@
 #import "TAScanResultItem.h"
 
 
+NSString*   const   TAScanResultItemKeyLanguage         = @"language";
+NSString*   const   TAScanResultItemKeyFiles            = @"files";
+NSString*   const   TAScanResultItemKeyCode             = @"code";
+NSString*   const   TAScanResultItemKeyComment          = @"comment";
+NSString*   const   TAScanResultItemKeyBlank            = @"blank";
+
+NSString*   const   TAScanResultHeaderLine              = @"files,language,blank,comment,code";
+NSString*   const   TAScanResultLineSeparator           = @",";
+
+
+
 @implementation TAScanResultItem
 
 - (void) dealloc
@@ -54,18 +65,18 @@
             {
                 // Skip lines as long as we do not encounter the header line to
                 // avoid garbage...
-                if ([line hasPrefix:@"files,language,blank,comment,code"] == NO)
+                if ([line hasPrefix:TAScanResultHeaderLine] == NO)
                 {
                     continue;
                 }
                 
-                keys = [line componentsSeparatedByString:@","];
+                keys = [line componentsSeparatedByString:TAScanResultLineSeparator];
                 keyCount = keys.count;
             }
             else // A data line
             {
                 id item = [self item];
-                NSArray* values = [line componentsSeparatedByString:@","];
+                NSArray* values = [line componentsSeparatedByString:TAScanResultLineSeparator];
                 
                 for (int i = 0; i < keyCount && i < values.count; i++)
                 {

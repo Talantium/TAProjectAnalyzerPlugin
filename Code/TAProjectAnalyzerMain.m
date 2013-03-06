@@ -14,10 +14,14 @@
 #import "TAScanResultItem.h"
 
 
-@interface TAProjectAnalyzerMain () <TAProjectScannerDelegate>
+@interface TAProjectAnalyzerMain () <TAProjectScannerDelegate, NSTableViewDataSource, NSTableViewDelegate>
 
-@property (nonatomic, retain, readwrite) TAProjectScanner*      scanner;
-@property (nonatomic, retain, readwrite) IBOutlet   NSWindow*   sheet;
+@property (nonatomic, retain, readwrite) TAProjectScanner*              scanner;
+@property (nonatomic, retain, readwrite) NSArray*                       lastResultItems;
+@property (nonatomic, retain, readwrite) IBOutlet NSWindow*             sheet;
+@property (nonatomic, retain, readwrite) IBOutlet NSProgressIndicator*  progressIndicator;
+@property (nonatomic, retain, readwrite) IBOutlet NSScrollView*         scrollTableView;
+@property (nonatomic, retain, readwrite) IBOutlet NSTableView*          tableView;
 
 @end
 
@@ -29,9 +33,9 @@
 	static id sharedPlugin = nil;
 	static dispatch_once_t once;
 	dispatch_once(&once,
-                  ^{
-                      sharedPlugin = [[self alloc] init];
-                  });
+      ^{
+          sharedPlugin = [[self alloc] init];
+      });
 }
 
 - (id) init
@@ -39,7 +43,7 @@
     self = [super init];
     if (self)
     {
-        self.scanner = [[TAProjectScanner alloc] init];
+        self.scanner = [[[TAProjectScanner alloc] init] autorelease];
         self.scanner.delegate = self;
         
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -54,6 +58,7 @@
 - (void) dealloc
 {
     [_scanner release], _scanner = nil;
+    [_lastResultItems release], _lastResultItems = nil;
     [_sheet release], _sheet = nil;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -78,21 +83,35 @@
     }
 }
 
+
+#pragma mark - Interface Actions
+
 - (void) showProjectStats:(id)origin
 {
-    NSString* pathToProjectRoot = [[[[NSDocumentController sharedDocumentController] currentDocument] fileURL] path];
+    // Get path to current focused document/project
+    NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
+    NSString* pathToProjectRoot = [[document fileURL] path];
     
     if ([self.scanner scanProjectInPath:pathToProjectRoot])
     {
-        // Show activity
-//        if ([NSBundle loadNibNamed:@"AnalyzerSheet" owner:self])
-//        {
-//            [NSApp beginSheet:self.sheet
-//               modalForWindow:[NSApp mainWindow]
-//                modalDelegate:self
-//               didEndSelector:@selector(didEndSheet:returnCode:contextInfo:)
-//                  contextInfo:nil];
-//        }
+        // Show sheet with activity indicator and for results later
+
+        NSWindow* currentWindow = [document windowForSheet];
+        if (currentWindow != nil)
+        {
+            if ([NSBundle loadNibNamed:@"AnalyzerSheet" owner:self])
+            {
+                [NSApp beginSheet:self.sheet
+                   modalForWindow:currentWindow
+                    modalDelegate:self
+                   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+                      contextInfo:nil];
+                
+                [self.progressIndicator startAnimation:nil];
+                [self.scrollTableView setHidden:YES];
+                self.lastResultItems = nil;
+            }
+        }
     }
     else
     {
@@ -107,36 +126,74 @@
     [NSApp endSheet:self.sheet];
 }
 
-- (void) didEndSheet:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
+- (void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
     [sheet orderOut:self];
 }
 
+
+#pragma mark - TAProjectScannerDelegate
+
 - (void) scanner:(TAProjectScanner*)scanner didFinishWithResult:(NSString*)result
 {
-    NSArray* items = [TAScanResultItem parseItemsFromCSVString:result];
-    
-    LogDebug(@"%@", items);
-    
-    NSMutableString* string = [NSMutableString string];
-    
-    for (TAScanResultItem* item in items)
+    if (self.tableView.tableColumns.count == 0)
     {
-        [string appendFormat:@"%@\n", item];
-    }
+        // Configure table view
+        NSDictionary* columns = @{TAScanResultItemKeyLanguage: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleLanguage"),
+                                  TAScanResultItemKeyFiles: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleFiles"),
+                                  TAScanResultItemKeyCode: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleCode"),
+                                  TAScanResultItemKeyComment: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleComments"),
+                                  TAScanResultItemKeyBlank: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleBlank")};
         
-    NSAlert* alert = [[[NSAlert alloc] init] autorelease];
-    [alert setMessageText:string];
-    [alert runModal];
+        NSArray* columnKeys = @[TAScanResultItemKeyLanguage, TAScanResultItemKeyFiles, TAScanResultItemKeyCode, TAScanResultItemKeyComment, TAScanResultItemKeyBlank];
+        for (NSString* key in columnKeys)
+        {
+            NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:key];
+            [column.headerCell setStringValue:[columns objectForKey:key]];
+            [self.tableView addTableColumn:column];
+            [column release];
+        }
+    }
+
+    self.lastResultItems = [TAScanResultItem parseItemsFromCSVString:result];
+    
+    [self.progressIndicator stopAnimation:nil];
+    [self.scrollTableView setHidden:NO];
+    [self.tableView reloadData];
 }
 
 - (void) scanner:(TAProjectScanner*)scanner didFailWithError:(NSString*)error
 {
+    [NSApp endSheet:self.sheet];
+
     LogDebug(@"%@", error);
 
     NSAlert* alert = [[[NSAlert alloc] init] autorelease];
     [alert setMessageText:TALocalize(@"TAProjectAnalyzerPluginGeneralErrorMessage")];
     [alert runModal];
+}
+
+
+#pragma mark - NSTableViewDataSource
+
+- (NSInteger) numberOfRowsInTableView:(NSTableView*)aTableView
+{
+    return self.lastResultItems.count;
+}
+
+- (id) tableView:(NSTableView*)aTableView objectValueForTableColumn:(NSTableColumn*)aTableColumn row:(NSInteger)rowIndex
+{
+    TAScanResultItem* item = [self.lastResultItems objectAtIndex:rowIndex];
+    
+    return [item valueForKey:aTableColumn.identifier];
+}
+
+
+#pragma mark - NSTableViewDelegate
+
+- (BOOL) tableView:(NSTableView*)tableView shouldEditTableColumn:(NSTableColumn*)tableColumn row:(NSInteger)row;
+{
+    return NO;
 }
 
 @end

@@ -6,6 +6,12 @@
   Copyright (c) 2013 talantium.net. All rights reserved.
 */
 
-"TAProjectAnalyzerPluginMenuItemTitle" = "Project Statistics";
+"TAProjectAnalyzerPluginMenuItemTitle"                  = "Project Statistics";
 
-"TAProjectAnalyzerPluginGeneralErrorMessage" = "Cannot analyze current window! :(";
+"TAProjectAnalyzerPluginGeneralErrorMessage"            = "Cannot analyze current window! :(";
+
+"TAProjectAnalyzerPluginResultTableTitleLanguage"       = "Language";
+"TAProjectAnalyzerPluginResultTableTitleFiles"          = "Files";
+"TAProjectAnalyzerPluginResultTableTitleCode"           = "LoC";
+"TAProjectAnalyzerPluginResultTableTitleComments"       = "Comments";
+"TAProjectAnalyzerPluginResultTableTitleBlank"          = "Whitespace";

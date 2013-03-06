@@ -7,7 +7,7 @@ Uses CLOC (http://cloc.sourceforge.net/)
 
 
 Install
-======
+=======
 
 1) Clone project
 2) Build project (installs automatically in the plugins dir of the current user)
@@ -16,9 +16,9 @@ Install
 5) If a proper project is open, the whole project folder is scanned for code files and LoC are counted
 
 
-ToDo
-======
 
-* Proper UI
-* Result parsing more robust
+ToDo
+====
+
 * Settings to choose/exclude folders
+* Result parsing more robust

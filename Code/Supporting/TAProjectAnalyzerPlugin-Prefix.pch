@@ -1,0 +1,20 @@
+//
+// Prefix header for all source files of the 'TAProjectAnalyzerPlugin' target in the 'TAProjectAnalyzerPlugin' project
+//
+
+#ifdef __OBJC__
+#endif
+
+#ifndef DEBUG
+    #define DEBUG			0 // Do not change! Handled by build settings
+#endif
+
+#if DEBUG
+    #define LogDebug(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+    #define LogDebugSimple(fmt, ...) NSLog((@"" fmt), ##__VA_ARGS__)
+#else
+    #define LogDebug(fmt, ...) (void)0
+    #define LogDebugSimple(fmt, ...) (void)0
+#endif
+
+#define TALocalize(key) NSLocalizedStringFromTableInBundle(key, @"Localizable", [NSBundle bundleForClass:[self class]], nil)

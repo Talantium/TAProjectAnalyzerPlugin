@@ -1,0 +1,335 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D9081B9E16E799CF00E49E8B /* TAScanResultItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D9081B9D16E799CF00E49E8B /* TAScanResultItem.m */; };
+		D91DABB216E7AC58004FA01D /* AnalyzerSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = D91DABB116E7AC58004FA01D /* AnalyzerSheet.xib */; };
+		D921DAFC16E751FF00FA5252 /* TAProjectAnalyzerMain.m in Sources */ = {isa = PBXBuildFile; fileRef = D921DAFB16E751FF00FA5252 /* TAProjectAnalyzerMain.m */; };
+		D921DAFD16E7528C00FA5252 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D921DAE516E7513B00FA5252 /* Foundation.framework */; };
+		D921DAFE16E7529000FA5252 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D921DAE316E7513B00FA5252 /* AppKit.framework */; };
+		D99277DE16E7551D00D8965F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D99277E016E7551D00D8965F /* Localizable.strings */; };
+		D9C1F13A16E77D1A000B9462 /* cloc-1.56.pl in Resources */ = {isa = PBXBuildFile; fileRef = D9C1F13916E77D1A000B9462 /* cloc-1.56.pl */; };
+		D9C9FD9616E77FE200AC8647 /* TAProjectScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C9FD9516E77FE200AC8647 /* TAProjectScanner.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D9081B9C16E799CF00E49E8B /* TAScanResultItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAScanResultItem.h; sourceTree = "<group>"; };
+		D9081B9D16E799CF00E49E8B /* TAScanResultItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAScanResultItem.m; sourceTree = "<group>"; };
+		D91DABB116E7AC58004FA01D /* AnalyzerSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AnalyzerSheet.xib; sourceTree = "<group>"; };
+		D921DADD16E7513B00FA5252 /* TAProjectAnalyzerPlugin.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TAProjectAnalyzerPlugin.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		D921DAE316E7513B00FA5252 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		D921DAE516E7513B00FA5252 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D921DAF416E751E600FA5252 /* TAProjectAnalyzerPlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TAProjectAnalyzerPlugin-Prefix.pch"; sourceTree = "<group>"; };
+		D921DAF816E751E600FA5252 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D921DAF916E751E600FA5252 /* TAProjectAnalyzerPlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TAProjectAnalyzerPlugin-Info.plist"; sourceTree = "<group>"; };
+		D921DAFA16E751FF00FA5252 /* TAProjectAnalyzerMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAProjectAnalyzerMain.h; sourceTree = "<group>"; };
+		D921DAFB16E751FF00FA5252 /* TAProjectAnalyzerMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAProjectAnalyzerMain.m; sourceTree = "<group>"; };
+		D99277DF16E7551D00D8965F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D9C1F13916E77D1A000B9462 /* cloc-1.56.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; path = "cloc-1.56.pl"; sourceTree = "<group>"; };
+		D9C9FD9416E77FE200AC8647 /* TAProjectScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAProjectScanner.h; sourceTree = "<group>"; };
+		D9C9FD9516E77FE200AC8647 /* TAProjectScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAProjectScanner.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D921DADA16E7513B00FA5252 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D921DAFE16E7529000FA5252 /* AppKit.framework in Frameworks */,
+				D921DAFD16E7528C00FA5252 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D921DAD416E7513B00FA5252 = {
+			isa = PBXGroup;
+			children = (
+				D921DAF216E751E600FA5252 /* Code */,
+				D921DAF516E751E600FA5252 /* Resources */,
+				D921DADF16E7513B00FA5252 /* Frameworks */,
+				D921DADE16E7513B00FA5252 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D921DADE16E7513B00FA5252 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D921DADD16E7513B00FA5252 /* TAProjectAnalyzerPlugin.xcplugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D921DADF16E7513B00FA5252 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D921DAE316E7513B00FA5252 /* AppKit.framework */,
+				D921DAE516E7513B00FA5252 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D921DAF216E751E600FA5252 /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				D921DAFA16E751FF00FA5252 /* TAProjectAnalyzerMain.h */,
+				D921DAFB16E751FF00FA5252 /* TAProjectAnalyzerMain.m */,
+				D9C9FD9416E77FE200AC8647 /* TAProjectScanner.h */,
+				D9C9FD9516E77FE200AC8647 /* TAProjectScanner.m */,
+				D9081B9C16E799CF00E49E8B /* TAScanResultItem.h */,
+				D9081B9D16E799CF00E49E8B /* TAScanResultItem.m */,
+				D9C1F13816E77D1A000B9462 /* Perl */,
+				D921DAF316E751E600FA5252 /* Supporting */,
+			);
+			path = Code;
+			sourceTree = "<group>";
+		};
+		D921DAF316E751E600FA5252 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				D921DAF416E751E600FA5252 /* TAProjectAnalyzerPlugin-Prefix.pch */,
+			);
+			path = Supporting;
+			sourceTree = "<group>";
+		};
+		D921DAF516E751E600FA5252 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D921DAF916E751E600FA5252 /* TAProjectAnalyzerPlugin-Info.plist */,
+				D91DABB116E7AC58004FA01D /* AnalyzerSheet.xib */,
+				D921DAF616E751E600FA5252 /* Localization */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D921DAF616E751E600FA5252 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				D921DAF716E751E600FA5252 /* InfoPlist.strings */,
+				D99277E016E7551D00D8965F /* Localizable.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		D9C1F13816E77D1A000B9462 /* Perl */ = {
+			isa = PBXGroup;
+			children = (
+				D9C1F13916E77D1A000B9462 /* cloc-1.56.pl */,
+			);
+			path = Perl;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D921DADC16E7513B00FA5252 /* TAProjectAnalyzerPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D921DAEF16E7513B00FA5252 /* Build configuration list for PBXNativeTarget "TAProjectAnalyzerPlugin" */;
+			buildPhases = (
+				D921DAD916E7513B00FA5252 /* Sources */,
+				D921DADA16E7513B00FA5252 /* Frameworks */,
+				D921DADB16E7513B00FA5252 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TAProjectAnalyzerPlugin;
+			productName = TAProjectAnalyzerPlugin;
+			productReference = D921DADD16E7513B00FA5252 /* TAProjectAnalyzerPlugin.xcplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D921DAD516E7513B00FA5252 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = talantium.net;
+			};
+			buildConfigurationList = D921DAD816E7513B00FA5252 /* Build configuration list for PBXProject "TAProjectAnalyzerPlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D921DAD416E7513B00FA5252;
+			productRefGroup = D921DADE16E7513B00FA5252 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D921DADC16E7513B00FA5252 /* TAProjectAnalyzerPlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D921DADB16E7513B00FA5252 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D99277DE16E7551D00D8965F /* Localizable.strings in Resources */,
+				D9C1F13A16E77D1A000B9462 /* cloc-1.56.pl in Resources */,
+				D91DABB216E7AC58004FA01D /* AnalyzerSheet.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D921DAD916E7513B00FA5252 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D921DAFC16E751FF00FA5252 /* TAProjectAnalyzerMain.m in Sources */,
+				D9C9FD9616E77FE200AC8647 /* TAProjectScanner.m in Sources */,
+				D9081B9E16E799CF00E49E8B /* TAScanResultItem.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		D921DAF716E751E600FA5252 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D921DAF816E751E600FA5252 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D99277E016E7551D00D8965F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D99277DF16E7551D00D8965F /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D921DAED16E7513B00FA5252 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D921DAEE16E7513B00FA5252 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D921DAF016E7513B00FA5252 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "${HOME}";
+				GCC_ENABLE_OBJC_GC = supported;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Code/Supporting/TAProjectAnalyzerPlugin-Prefix.pch";
+				INFOPLIST_FILE = "Resources/TAProjectAnalyzerPlugin-Info.plist";
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xcplugin;
+			};
+			name = Debug;
+		};
+		D921DAF116E7513B00FA5252 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DSTROOT = "${HOME}";
+				GCC_ENABLE_OBJC_GC = supported;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Code/Supporting/TAProjectAnalyzerPlugin-Prefix.pch";
+				INFOPLIST_FILE = "Resources/TAProjectAnalyzerPlugin-Info.plist";
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xcplugin;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D921DAD816E7513B00FA5252 /* Build configuration list for PBXProject "TAProjectAnalyzerPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D921DAED16E7513B00FA5252 /* Debug */,
+				D921DAEE16E7513B00FA5252 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D921DAEF16E7513B00FA5252 /* Build configuration list for PBXNativeTarget "TAProjectAnalyzerPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D921DAF016E7513B00FA5252 /* Debug */,
+				D921DAF116E7513B00FA5252 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D921DAD516E7513B00FA5252 /* Project object */;
+}

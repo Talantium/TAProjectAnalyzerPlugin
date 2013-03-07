@@ -58,7 +58,7 @@ NSString*   const   TAProjectScannerClocName            = @"cloc-1.56";
             [task setStandardOutput:[NSPipe pipe]];
             [task setStandardError:[NSPipe pipe]];
             [task setLaunchPath:TAProjectScannerPathToPerl];
-            [task setArguments:@[self.pathToPerlScript, path, @"--quiet", @"--csv", @"--exclude-dir=build", @"--force-lang=\"Objective C\",m"]];
+            [task setArguments:@[self.pathToPerlScript, path, @"--quiet", @"--csv", @"--exclude-dir=build", @"--force-lang=Objective C,m"]];
             [task setTerminationHandler:^(NSTask* task)
             {           
                 if ([task terminationStatus] == 0)

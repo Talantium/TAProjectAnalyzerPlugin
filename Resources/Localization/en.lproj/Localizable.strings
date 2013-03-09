@@ -15,3 +15,9 @@
 "TAProjectAnalyzerPluginResultTableTitleCode"           = "LoC";
 "TAProjectAnalyzerPluginResultTableTitleComments"       = "Comments";
 "TAProjectAnalyzerPluginResultTableTitleBlank"          = "Whitespace";
+
+"TAProjectAnalyzerPluginButtonAbortTitle"               = "Abort";
+"TAProjectAnalyzerPluginButtonRescanTitle"              = "Rescan";
+
+
+

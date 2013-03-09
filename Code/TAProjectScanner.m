@@ -16,11 +16,16 @@ NSString*   const   TAProjectScannerClocName            = @"cloc-1.56";
 @interface TAProjectScanner ()
 
 @property (nonatomic, retain, readwrite) NSString*      pathToPerlScript;
+@property (nonatomic, retain, readwrite) NSTask*        task;
+@property (nonatomic, assign, readwrite) BOOL           abortedManually;
 
 @end
 
 
 @implementation TAProjectScanner
+
+@dynamic isScanning;
+
 
 - (id) init
 {
@@ -33,34 +38,39 @@ NSString*   const   TAProjectScannerClocName            = @"cloc-1.56";
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [_pathToPerlScript release], _pathToPerlScript = nil;
+    [_scanPath release], _scanPath = nil;
+    [_task release], _task = nil;
     
     [super dealloc];
 }
 
-- (BOOL) scanProjectInPath:(NSString*)path
+- (BOOL) isScanning
 {
-    // Document root is the xcodeproj file that is inside the project or workspace
-    // bundle, we must remove them first to get to the project root.
-    while ([[path lastPathComponent] hasSuffix:@".xcworkspace"]
-           || [[path lastPathComponent] hasSuffix:@".xcodeproj"])
-    {
-        path = [path stringByDeletingLastPathComponent];
-    }
+    return (self.task != nil && [self.task isRunning]);
+}
+
+- (BOOL) scan
+{
+    NSString* path = [self.scanPath path];
     
     if (self.pathToPerlScript.length > 0
         && path.length > 0)
-    {        
-        NSTask* task = [[[NSTask alloc] init] autorelease];
+    {
+        self.abortedManually = NO;
+
+        NSTask* task = [[NSTask alloc] init];
         {            
             [task setStandardOutput:[NSPipe pipe]];
             [task setStandardError:[NSPipe pipe]];
             [task setLaunchPath:TAProjectScannerPathToPerl];
             [task setArguments:@[self.pathToPerlScript, path, @"--quiet", @"--csv", @"--exclude-dir=build", @"--force-lang=Objective C,m"]];
             [task setTerminationHandler:^(NSTask* task)
-            {           
+            {
+                self.task = nil;
+
                 if ([task terminationStatus] == 0)
                 {
                     NSPipe* outPipe = task.standardOutput;
@@ -79,28 +89,41 @@ NSString*   const   TAProjectScannerClocName            = @"cloc-1.56";
                 }
                 else
                 {
-                    NSPipe* errorPipe = task.standardError;
-                    NSData* error = [[errorPipe fileHandleForReading] readDataToEndOfFile];
-                    NSString* result = [[NSString alloc] initWithData:error encoding:NSUTF8StringEncoding];
-                    
-                    dispatch_sync(dispatch_get_main_queue(),
-                    ^{
-                       if ([self.delegate respondsToSelector:@selector(scanner:didFailWithError:)])
-                       {
-                           [self.delegate scanner:self didFailWithError:result];
-                       }
-                    });
-                    
-                    [result release];
+                    if (self.abortedManually == NO)
+                    {
+                        NSPipe* errorPipe = task.standardError;
+                        NSData* error = [[errorPipe fileHandleForReading] readDataToEndOfFile];
+                        NSString* result = [[NSString alloc] initWithData:error encoding:NSUTF8StringEncoding];
+                        
+                        dispatch_sync(dispatch_get_main_queue(),
+                                      ^{
+                                          if ([self.delegate respondsToSelector:@selector(scanner:didFailWithError:)])
+                                          {
+                                              [self.delegate scanner:self didFailWithError:result];
+                                          }
+                                      });
+                        
+                        [result release];
+                    }
                 }
             }];
+            
         }
         [task launch];
+        self.task = task;
+        [task release];
         
         return YES;
     }
     
     return NO;
+}
+
+- (void) abortScan
+{
+    self.abortedManually = YES;
+    [self.task terminate];
+    self.task = nil;
 }
 
 @end

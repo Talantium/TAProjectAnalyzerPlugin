@@ -14,8 +14,11 @@
 @interface TAProjectScanner : NSObject
 
 @property (nonatomic, assign, readwrite) id<TAProjectScannerDelegate>   delegate;
+@property (nonatomic, retain, readwrite) NSURL*                         scanPath;
+@property (nonatomic, assign, readonly)  BOOL                           isScanning;
 
-- (BOOL) scanProjectInPath:(NSString*)path;
+- (BOOL) scan;
+- (void) abortScan;
 
 @end
 

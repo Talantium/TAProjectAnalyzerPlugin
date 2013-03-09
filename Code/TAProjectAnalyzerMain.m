@@ -18,10 +18,14 @@
 
 @property (nonatomic, retain, readwrite) TAProjectScanner*              scanner;
 @property (nonatomic, retain, readwrite) NSArray*                       lastResultItems;
-@property (nonatomic, retain, readwrite) IBOutlet NSWindow*             sheet;
-@property (nonatomic, retain, readwrite) IBOutlet NSProgressIndicator*  progressIndicator;
-@property (nonatomic, retain, readwrite) IBOutlet NSScrollView*         scrollTableView;
-@property (nonatomic, retain, readwrite) IBOutlet NSTableView*          tableView;
+@property (nonatomic, retain, readwrite) IBOutlet NSWindow*             sheet; // Retain top level NIB element
+@property (nonatomic, assign, readwrite) IBOutlet NSProgressIndicator*  progressIndicator;
+@property (nonatomic, assign, readwrite) IBOutlet NSScrollView*         scrollTableView;
+@property (nonatomic, assign, readwrite) IBOutlet NSTableView*          tableView;
+@property (nonatomic, assign, readwrite) IBOutlet NSTextField*          textFieldScannedFolder;
+@property (nonatomic, assign, readwrite) IBOutlet NSTextField*          textFieldStaticInfo;
+@property (nonatomic, assign, readwrite) IBOutlet NSButton*             buttonStartStopScan;
+@property (nonatomic, assign, readwrite) IBOutlet NSButton*             buttonChooseFolder;
 
 @end
 
@@ -89,13 +93,11 @@
 - (void) showProjectStats:(id)origin
 {
     // Get path to current focused document/project
-    NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
-    NSString* pathToProjectRoot = [[document fileURL] path];
-    
-    if ([self.scanner scanProjectInPath:pathToProjectRoot])
+    self.scanner.scanPath = [self projectRootURL];
+    if ([self.scanner scan])
     {
         // Show sheet with activity indicator and for results later
-
+        NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
         NSWindow* currentWindow = [document windowForSheet];
         if (currentWindow != nil)
         {
@@ -107,9 +109,7 @@
                    didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
                       contextInfo:nil];
                 
-                [self.progressIndicator startAnimation:nil];
-                [self.scrollTableView setHidden:YES];
-                self.lastResultItems = nil;
+                [self startScan];
             }
         }
     }
@@ -123,12 +123,114 @@
 
 - (IBAction) closeSheet:(id)sender
 {
+    [self.scanner abortScan];
     [NSApp endSheet:self.sheet];
+}
+
+- (IBAction) chooseFolderToScan:(id)sender
+{    
+    __block NSOpenPanel* panel = [NSOpenPanel openPanel];
+    [panel setCanChooseFiles:NO];
+    [panel setCanCreateDirectories:NO];
+    [panel setCanChooseDirectories:YES];
+    [panel setAllowsMultipleSelection:NO];
+    [panel setDirectoryURL:self.scanner.scanPath];
+    [panel beginSheetModalForWindow:self.sheet
+                  completionHandler:
+     ^(NSInteger result)
+    {
+        if (result == NSOKButton)
+        {
+            NSURL* selectedURL = [[panel URLs] lastObject];
+            if (selectedURL)
+            {
+                self.scanner.scanPath = selectedURL;
+                [self startScan];
+            }
+        }
+    }];
+}
+
+- (IBAction) startStopScan:(id)sender
+{
+    if (self.scanner.isScanning)
+    {
+        [self stopScan];
+    }
+    else
+    {
+        [self startScan];
+    }
 }
 
 - (void) sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void*)contextInfo
 {
     [sheet orderOut:self];
+}
+
+
+#pragma mark - Scanning
+
+- (NSURL*) projectRootURL
+{
+    NSDocument* document = [[NSDocumentController sharedDocumentController] currentDocument];
+    NSURL* projectFileURL = [document fileURL];
+        
+    // Document root is the xcodeproj file that is inside the project or workspace
+    // bundle, we must remove them first to get to the project root.
+    while ([[projectFileURL lastPathComponent] hasSuffix:@".xcworkspace"]
+           || [[projectFileURL lastPathComponent] hasSuffix:@".xcodeproj"])
+    {
+        projectFileURL = [projectFileURL URLByDeletingLastPathComponent];
+    }
+    
+    return projectFileURL;
+}
+
+- (void) startScan
+{
+    BOOL scanning = self.scanner.isScanning;
+    if (scanning == NO)
+    {
+        scanning = [self.scanner scan];
+    }
+    
+    if (scanning)
+    {
+        // Clear last result
+        self.lastResultItems = nil;
+        
+        [self.scrollTableView setHidden:YES];
+        
+        [self.progressIndicator startAnimation:nil];
+        [self.textFieldScannedFolder setHidden:NO];
+        [self.textFieldStaticInfo setHidden:NO];
+        
+        [self.buttonChooseFolder setEnabled:NO];
+        [self.buttonStartStopScan setTitle:TALocalize(@"TAProjectAnalyzerPluginButtonAbortTitle")];
+        [self.textFieldScannedFolder.cell setTitle:[self.scanner.scanPath path]];
+    }
+    else
+    {
+        // Some error message?
+    }
+}
+
+- (void) stopScan
+{
+    [self.scanner abortScan];
+    if (self.scanner.isScanning == NO)
+    {
+        [self.buttonChooseFolder setEnabled:YES];
+        [self.buttonStartStopScan setTitle:TALocalize(@"TAProjectAnalyzerPluginButtonRescanTitle")];
+    }
+    
+    [self.progressIndicator stopAnimation:nil];
+    [self.textFieldScannedFolder setHidden:YES];
+    [self.textFieldStaticInfo setHidden:YES];
+    
+    [self.scrollTableView setHidden:NO];
+    [self.tableView reloadData];
 }
 
 
@@ -157,9 +259,7 @@
 
     self.lastResultItems = [TAScanResultItem parseItemsFromCSVString:result];
     
-    [self.progressIndicator stopAnimation:nil];
-    [self.scrollTableView setHidden:NO];
-    [self.tableView reloadData];
+    [self stopScan];
 }
 
 - (void) scanner:(TAProjectScanner*)scanner didFailWithError:(NSString*)error

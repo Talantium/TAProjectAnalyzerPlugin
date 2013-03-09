@@ -17,5 +17,4 @@ Uses CLOC (http://cloc.sourceforge.net/)
 
 ## ToDo
 
-* Settings to choose/exclude folders
 * Result parsing more robust

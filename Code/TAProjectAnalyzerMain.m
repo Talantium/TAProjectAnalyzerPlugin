@@ -238,24 +238,7 @@
 
 - (void) scanner:(TAProjectScanner*)scanner didFinishWithResult:(NSString*)result
 {
-    if (self.tableView.tableColumns.count == 0)
-    {
-        // Configure table view
-        NSDictionary* columns = @{TAScanResultItemKeyLanguage: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleLanguage"),
-                                  TAScanResultItemKeyFiles: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleFiles"),
-                                  TAScanResultItemKeyCode: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleCode"),
-                                  TAScanResultItemKeyComment: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleComments"),
-                                  TAScanResultItemKeyBlank: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleBlank")};
-        
-        NSArray* columnKeys = @[TAScanResultItemKeyLanguage, TAScanResultItemKeyFiles, TAScanResultItemKeyCode, TAScanResultItemKeyComment, TAScanResultItemKeyBlank];
-        for (NSString* key in columnKeys)
-        {
-            NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:key];
-            [column.headerCell setStringValue:[columns objectForKey:key]];
-            [self.tableView addTableColumn:column];
-            [column release];
-        }
-    }
+    [self configureTableView];
 
     self.lastResultItems = [TAScanResultItem parseItemsFromCSVString:result];
     
@@ -271,6 +254,49 @@
     NSAlert* alert = [[[NSAlert alloc] init] autorelease];
     [alert setMessageText:TALocalize(@"TAProjectAnalyzerPluginGeneralErrorMessage")];
     [alert runModal];
+}
+
+- (void)configureTableView
+{
+    if (self.tableView.tableColumns.count == 0)
+    {
+        // Configure table view
+        NSDictionary* columns = @{TAScanResultItemKeyLanguage: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleLanguage"),
+                                  TAScanResultItemKeyFiles: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleFiles"),
+                                  TAScanResultItemKeyCode: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleCode"),
+                                  TAScanResultItemKeyComment: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleComments"),
+                                  TAScanResultItemKeyBlank: TALocalize(@"TAProjectAnalyzerPluginResultTableTitleBlank")};
+
+        NSArray* columnKeys = @[TAScanResultItemKeyLanguage,
+                                TAScanResultItemKeyFiles,
+                                TAScanResultItemKeyCode,
+                                TAScanResultItemKeyComment,
+                                TAScanResultItemKeyBlank];
+
+        for (NSString* key in columnKeys)
+        {
+            NSTableColumn* column = [[NSTableColumn alloc] initWithIdentifier:key];
+
+            if ([key isEqual:TAScanResultItemKeyLanguage])
+            {
+                [column setResizingMask:NSTableColumnAutoresizingMask];
+            }
+            else
+            {
+                [column.dataCell setAlignment:NSRightTextAlignment];
+            }
+
+            if ([key isEqual:TAScanResultItemKeyFiles])
+            {
+                CGFloat regularWidth = (self.tableView.frame.size.width/columnKeys.count);
+                [column setMaxWidth:regularWidth - 24.0f];
+            }
+
+            [column.headerCell setStringValue:[columns objectForKey:key]];
+            [self.tableView addTableColumn:column];
+            [column release];
+        }
+    }
 }
 
 
